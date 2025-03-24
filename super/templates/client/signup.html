@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sign up</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px 40px 50px 20px ;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 420px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color:rgb(8, 32, 131);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color:rgb(33, 33, 215);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>sign up</h2>
+
+{% if errors.user %}
+        <p style="color:red;">{{ errors.user }}</p>
+    {% endif %}
+
+    {% if errors.email %}
+    <p style="color:red;">{{ errors.email }}</p>
+{% endif %}   
+
+{% if errors.password %}
+        <p style="color:red;">{{ errors.password }}</p>
+    {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="user" placeholder="user name" required>
+            <input type="email" name="email" placeholder="email" required>
+            <input type="text" name="address" placeholder="your address" required>
+            <input type="text" name="phone" placeholder="phone" required>
+            <input type="password" name="password" placeholder="password" required>
+            
+
+            
+            <button type="submit">supmit</button>
+        </form>
+    </div>
+<script>
+    const user = document.querySelector('input[name="user"]');
+    const email = document.querySelector('input[name="email"]');
+    const password = document.querySelector('input[name="password"]');
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', (e) => {
+        if (user.value.trim() === '' || user.value.trim().length < 3) {
+            e.preventDefault();
+            alert('user name is required');
+        }
+        if (email.value.trim() === '') {
+            e.preventDefault();
+            alert('email is required');
+        }
+        if (password.value.trim() === '') {
+            e.preventDefault();
+            alert('password is required');
+        }
+    });
+
+
+</script>
+</body>
+</html> 

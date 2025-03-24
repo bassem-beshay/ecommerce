@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2e1a35;
+            color: #e0d0e7;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: #3b2145;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #442a55;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transform: translateY(-40px); /* رفع الصورة أكثر */
+        }
+        .product img {
+            width: 220px;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .product img:hover {
+            transform: scale(1.1);
+        }
+        #colorImage {
+            width: 220px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        .product-details {
+            flex: 1;
+            padding-left: 20px;
+            text-align: left;
+        }
+        .product-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffdd57;
+            margin-top: 10px;
+        }
+        .product-desc, .product-design, .product-detail {
+            font-size: 18px;
+            color: #d4af37; /* توحيد اللون مع Description */
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .product-desc span, .product-design span, .product-detail span {
+            font-size: 16px;
+            color: #e0d0e7;
+            font-weight: normal;
+        }
+        .product-buttons {
+            margin-top: 15px;
+        }
+        .buy-button {
+            background: rgb(241, 211, 41);
+            color: #3b2145;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+        .buy-button:hover {
+            background: #b29500;
+        }
+        .cart-button {
+            background: #6a0dad;
+            color: #FFD700;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .cart-button:hover {
+            background: #551a8b;
+        }
+        .color-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: transform 0.3s;
+        }
+        .color-circle:hover {
+            transform: scale(1.2);
+        }
+    </style>
+    <script>
+        function showColorImage(imgUrl) {
+            let colorImage = document.getElementById("colorImage");
+            colorImage.src = imgUrl;
+            colorImage.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        {% for dd in prode %}
+        <div class="product">
+            <div class="image-container">
+                <img id="mainProductImage" src="{{ dd.img.url }}" alt="Product Image">
+                <img id="colorImage" src="" alt="Color Preview">
+            </div>
+            <div class="product-details">
+                <div class="product-name">{{ dd.name }}</div>
+                <div class="product-price">{{ dd.price }} $</div>
+                <div class="product-desc"> Description <br> <span>{{ dd.desc }}</span></div>
+                <hr>
+                <div class="product-design"> Design <br> <span>{{ dd.design }}</span></div>
+                <div class="product-detail"> Detail <br> <span>{{ dd.detail }}</span></div>
+                
+                <div class="product-buttons">
+                    <a href="https://wa.me/201010800836?text=I%20want%20to%20buy%20{{ dd.name }}">
+                        <button class="buy-button">Buy</button>
+                    </a>
+                    <a href="/cart/{{dd.product_id}}">
+                        <button class="cart-button">Add to Cart</button>
+                    </a>
+                </div>
+                {% for detail in color %}
+                <div class="color-circle" onclick="showColorImage('{{ detail.img.url }}')" style="background: {{ detail.name | lower }};"></div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="container">
+        <h2>More Products</h2>
+        <div class="product-gallery">
+            {% for ca in cat %}
+            <div class="gallery-item">
+                <a href="/product_detail/{{ ca.product_id }}">
+                    
+                <img src="{{ ca.img.url }}" alt="{{ ca.name }}"> </a>
+                <p class="{% if ca.name == 'Ring Engagement' %}ring-engagement{% endif %}">{{ ca.name }}</p>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /><style>
+    .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #3b2145;
+        padding: 12px 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        gap: 30px;
+    }
+
+    .navbar a {
+        color: #fce8d5;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 600;
+        padding: 6px 10px;
+        transition: all 0.3s ease;
+        position: relative;
+        font-family: 'Georgia', serif;
+        letter-spacing: 0.4px;
+    }
+
+    .navbar a:hover {
+        color: #d4af37;
+    }
+
+    .navbar a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background-color: #d4af37;
+        transition: 0.3s ease-in-out;
+    }
+
+    .navbar a:hover::after {
+        width: 100%;
+    }
+
+    .cart-icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 5px;
+    }
+
+    .cart-icon img {
+        width: 26px;
+        height: 26px;
+        object-fit: contain;
+        vertical-align: middle;
+    }
+
+    .cart-count {
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 50%;
+    }
+    .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #3b2145;
+        padding: 12px 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        gap: 100px; /* زيادة المسافة بين العناصر */
+    }
+    
+    .navbar a,
+    .navbar img {
+        margin: 0 15px; /* إضافة مسافات جانبية */
+    }
+</style>
+</head>
+<body>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="#categories">Categories</a>
+
+    <a href="#services">Services</a>
+    <img src="{% static 'img/logo_.png' %}" alt="Logo" style="width: 50px; height: 50px;">
+    <h3>hi {{ user.user_name }}</h3>
+    <a href="/logout">logout</a>
+    <a href="/cart_view" class="cart-icon">
+        <i class="fas fa-shopping-cart" style="font-size: 26px; color: #fce8d5;"></i>
+        <span class="cart-count">{{ cart_count }}</span>
+     
+    </a>
+
+</div>
+{% include 'client/profile.html' %}
+{% include 'client/footer.html' %}
+</body>
+</html>

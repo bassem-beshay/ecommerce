@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2e1a35;
+            color: #e0d0e7;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .product-card {
+            background: #3b2145;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 380px; /* تقليل الطول */
+        }
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+        .product-card img {
+            width: 85%;
+            height: 200px; /* تقليل حجم الصورة */
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .product-name {
+            font-size: 14px; /* تقليل الخط */
+            font-weight: bold;
+            margin-top: 8px; /* تقليل المسافة */
+            color: #ffccff;
+            text-align: center;
+        }
+        .product-price {
+            font-size: 14px; /* تصغير الخط */
+            color: yellow;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+        .stars {
+            color: yellow;
+            font-size: 16px; /* تصغير النجوم */
+            margin: 8px 0; /* تقليل المسافة */
+        }
+        .product-buttons {
+            margin-top: 10px; /* تقليل المسافة بين الأزرار */
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .product-buttons button {
+            padding: 8px 10px; /* تصغير الأزرار */
+            font-size: 12px; /* تصغير الخط */
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out;
+        }
+        .buy-button {
+            background: white;
+            color: #3b2145;
+            border: 2px solid #3b2145;
+        }
+        .buy-button:hover {
+            background: #3b2145;
+            color: white;
+        }
+        .cart-button {
+            background: #a26baf;
+            color: white;
+        }
+        .cart-button:hover {
+            background: #8c5c99;
+        }
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .product-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'client/navbar.html' %}
+
+    <img src="{% static 'img/products.jpeg' %}" alt="cover" style="width: 100%; margin-bottom: 10px ; height: 500px;">
+    
+    <div class="container">
+       
+        <div class="product-grid">
+            {% for pr in prod %}
+            <div class="product-card">
+                <a href='/product_detail/{{pr.product_id}}'>
+                    <img src="{{ pr.img.url }}" alt="{{ pr.name }}">
+                </a>
+                <div class="product-name">{{ pr.name }}</div>
+                <div class="product-price">{{ pr.price }} $</div>
+                <div class="stars">★★★★★</div>
+                <div class="product-buttons">
+                    <a href="https://wa.me/201010800836?text=I%20want%20to%20buy%20{{pr.name}}">
+                        <button class="buy-button">Buy</button>
+                    </a>
+                    <a href="/cart/{{pr.product_id}}">
+                        <button class="cart-button">Add to Cart</button>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% include 'client/footer.html' %}
+</body>
+</html>
