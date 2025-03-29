@@ -62,9 +62,15 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 # قاعدة البيانات
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'LMtpVBguzqzgfLTVKDVsROceSsVMLQzf',  # استخدم القيمة الكاملة من الصورة
+        'HOST': 'postgres.railway.internal',
+        'PORT': '5432',
+    }
 }
-
 # إذا لم يتم العثور على `DATABASE_URL`، طباعة تحذير
 if not DATABASES['default']:
     print("⚠️ تحذير: لم يتم العثور على DATABASE_URL، تأكد من تعيينه في متغيرات البيئة.")
