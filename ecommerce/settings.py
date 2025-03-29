@@ -1,33 +1,34 @@
+"""
+Django settings for ecommerce project.
+"""
+
 import os
 import dj_database_url
-from dotenv import load_dotenv
 from pathlib import Path
 
-# تحميل المتغيرات البيئية
-load_dotenv()
-
-# المسار الأساسي للمشروع
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# مفاتيح الأمان والبيئة
-SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
+# Security settings
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key-only')  # تغيير في الإنتاج!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') or ['*']  # ضيق النطاق في الإنتاج
 
-# التطبيقات المثبتة
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',  # للتطوير المحلي
     'django.contrib.staticfiles',
     'super',
 ]
 
-# الوسائط الوسطية (Middleware)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -36,10 +37,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ضبط الروابط
 ROOT_URLCONF = 'ecommerce.urls'
 
-# القوالب
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -56,24 +55,21 @@ TEMPLATES = [
     },
 ]
 
-# إعدادات WSGI
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-# قاعدة البيانات
+# Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGDATABASE', 'railway'),
+        'USER': os.getenv('PGUSER', 'postgres'),
+        'PASSWORD': os.getenv('PGPASSWORD', ''),
+        'HOST': os.getenv('PGHOST', 'containers-us-west-100.railway.app'),
+        'PORT': os.getenv('PGPORT', '5432'),
+    }
 }
 
-
-# إذا لم يتم العثور على `DATABASE_URL`، طباعة تحذير
-if not DATABASES['default']:
-    print("\u26A0\uFE0F تحذير: لم يتم العثور على DATABASE_URL، تأكد من تعيينه في متغيرات البيئة.")
-
-# التحقق من كلمات المرور
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -81,28 +77,43 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# اللغات والتوقيت
-LANGUAGE_CODE = 'en-us'
+# Internationalization
+LANGUAGE_CODE = 'ar'  # تغيير للغة العربية
 TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-# الملفات الثابتة والوسائط
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# نوع المفتاح الأساسي الافتراضي
+# Default primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# إعدادات تسجيل الدخول
+# Auth settings
 LOGIN_URL = 'login'
-
-# إعدادات الجلسات
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Railway-specific settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Production security settings
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
