@@ -12,7 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # مفاتيح الأمان والبيئة
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 # التطبيقات المثبتة
@@ -44,7 +43,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,18 +61,12 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 # قاعدة البيانات
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'LMtpVBguzqzgfLTVKDVsROceSsVMLQzf',  # استخدم القيمة الكاملة من الصورة
-        'HOST': 'postgres.railway.internal',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
+
 # إذا لم يتم العثور على `DATABASE_URL`، طباعة تحذير
 if not DATABASES['default']:
-    print("⚠️ تحذير: لم يتم العثور على DATABASE_URL، تأكد من تعيينه في متغيرات البيئة.")
+    print("\u26A0\uFE0F تحذير: لم يتم العثور على DATABASE_URL، تأكد من تعيينه في متغيرات البيئة.")
 
 # التحقق من كلمات المرور
 AUTH_PASSWORD_VALIDATORS = [
@@ -85,15 +78,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # اللغات والتوقيت
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-# الملفات الثابتة (Static & Media)
-STATIC_URL = 'static/'
+# الملفات الثابتة والوسائط
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # نوع المفتاح الأساسي الافتراضي
