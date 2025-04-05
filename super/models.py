@@ -32,7 +32,7 @@ class Category(models.Model):
     category_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=50)
     imgc = models.ImageField(upload_to='category_images', blank=True, null=True)
-    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # وضع قيمة افتراضية للمستخدم الأول
+    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للمستخدم الأول
 
     class Meta:
         db_table = 'category'
@@ -45,7 +45,7 @@ class Color(models.Model):
     color_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=25)
     img = models.ImageField(upload_to='color_images', blank=True, null=True)
-    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # وضع قيمة افتراضية للمستخدم الأول
+    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للمستخدم الأول
 
     class Meta:
         db_table = 'color'
@@ -60,7 +60,7 @@ class Product(models.Model):
     desc = models.CharField(max_length=600)
     img = models.ImageField(upload_to='product_images', blank=True, null=True)
     price = models.BigIntegerField()
-    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # وضع قيمة افتراضية للمستخدم الأول
+    admin = models.ForeignKey(Suber, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للمستخدم الأول
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     design = models.CharField(max_length=400, blank=True, null=True)
     detail = models.CharField(max_length=400, blank=True, null=True)
@@ -74,8 +74,8 @@ class Product(models.Model):
 
 class ProductColor(models.Model):
     pc_id = models.BigAutoField(primary_key=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للمنتج
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للون
 
     class Meta:
         db_table = 'product_color'
