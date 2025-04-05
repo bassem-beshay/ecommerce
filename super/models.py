@@ -86,8 +86,8 @@ class ProductColor(models.Model):
 
 class ProductUser(models.Model):
     pu_id = models.BigAutoField(primary_key=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(Client, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للمنتج
+    user = models.ForeignKey(Client, on_delete=models.CASCADE, default=1)  # فرض قيمة افتراضية للعميل
 
     class Meta:
         db_table = 'product_user'
